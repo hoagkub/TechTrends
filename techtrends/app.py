@@ -79,7 +79,7 @@ def create():
 
     return render_template('create.html')
 
-@app.route('/heathz')
+@app.route('/healthz')
 def healthz():
     try: 
         connection = get_db_connection()
