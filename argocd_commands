@@ -1,0 +1,21 @@
+# Install k3d
+curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+# Install kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+kubectl version --client
+
+k3d cluster create my-cluster --api-port 6443 -p 30008:30008@loadbalancer -p 30007:30007@loadbalancer
+
+kubectl create namespace argocd
+wget https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply -n argocd -f install.yaml
+
+kubectl get po -n argocd
+# Let's wait for ArgoCD to have all the containers in a running status
+
+wget https://raw.githubusercontent.com/udacity/nd064_course_1/main/solutions/argocd/argocd-server-nodeport.yaml
+kubectl apply -n argocd -f argocd-server-nodeport.yaml
+
+# to get password, user: admin
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
