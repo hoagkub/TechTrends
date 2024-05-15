@@ -19,3 +19,12 @@ kubectl apply -n argocd -f argocd-server-nodeport.yaml
 
 # to get password, user: admin
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
+
+git clone https://github.com/hoagkub/TechTrends.git
+
+kubectl apply -f TechTrends/argocd/helm-techtrends-staging.yaml
+kubectl apply -f TechTrends/argocd/helm-techtrends-prod.yaml
+
+# To check application
+kubectl get po -A
